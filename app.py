@@ -20,13 +20,15 @@ def post_search():
 	name = request.forms.get('name', '').strip()
 	return search(name)
 
+@get('/search')
+def search():
+	didSearch = False
+	return template('list_view', rows=[], search_name="", didSearch=didSearch)
 @get('/search/<name>')
 def search(name):
-	wishlist = wishlist_db.all()
+	didSearch = True
 	results = db.search(where('artist').contains(name.title()))
-	if (len(results) == 0):
-		name = "Not found"
-	return template('list_view', rows=results, search_name=name, wish_rows=wishlist)
+	return template('list_view', rows=results, search_name=name, didSearch=didSearch)
 
 @get('/wishlist')
 def wish_list():
@@ -59,6 +61,13 @@ def add(name,id):
 	add_to_wishlist(suggestions[id])
 	return suggest(name)
 
+@route('/<filename:path>')
+def send_static(filename):
+	return static_file(filename, root='static/')
+
 if __name__ == "__main__":
 	run(reloader = True, host="0.0.0.0")
+else:
+	application = default_app()
+	
 
