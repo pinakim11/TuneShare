@@ -12,8 +12,7 @@ wishlist_db = TinyDB('wishlist_db.json')
 
 @get('/')
 def welcome():
-	wishlist = wishlist_db.all()
-	return template('home_view', wish_rows=wishlist) 
+	return template('home_view') 
 
 @post('/')
 def post_search():
